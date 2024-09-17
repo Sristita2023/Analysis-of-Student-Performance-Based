@@ -1,0 +1,27 @@
+sqlite3 StudentsPerformance.db
+mode csv
+ .import "C:/Users/siddh/OneDrive/Documents/StudentsPerformance.csv"
+
+ .tables
+students
+
+SELECT * FROM students WHERE gender = 'male';
+SELECT * FROM students WHERE gender = 'female';
+
+
+SELECT "race/ethnicity", AVG("math score") AS avg_math_score, AVG("reading score") AS
+avg_reading_score, AVG("writing score") AS avg_writing_score FROM students GROUP BY
+"race/ethnicity";
+
+SELECT "parental level of education", COUNT(*) AS student_count FROM students
+GROUP BY "parental level of education";
+
+
+SELECT lunch, AVG("math score") AS avg_math_score, AVG("reading score") AS
+avg_reading_score, AVG("writing score") AS avg_writing_score FROM students
+GROUP BY lunch;
+
+WITH ranked_students AS ( SELECT *, (("math score" + "reading score" + "writing score") /
+3.0) AS average_score, NTILE(10) OVER (ORDER BY (("math score" + "reading score" +
+"writing score") / 3.0) DESC) AS decile FROM students)SELECT * FROM ranked_students
+WHERE decile = 1;
